@@ -10,6 +10,7 @@ from tkinter import *
 import time #시간 계산을 위한 모듈
 from tkinter.colorchooser import askcolor  # 색상 선택 대화 상자를 가져옴
 import math  # 수학 모듈을 가져옴
+import random  # random 모듈 추가
 
 # 초기 설정 값들
 selected_shape = "oval"  # 기본 도형은 타원형으로 설정
@@ -134,6 +135,18 @@ def create_new_window():
     new_canvas.pack() #캔버스가 새로운 창에 배치
     new_window.mainloop()
 
+# 스프레이형 브러쉬 함수
+def spray_paint(event):
+    spray_radius = 20  # 스프레이 반지름 설정
+    density = 50  # 스프레이 밀도 설정
+    for _ in range(density):
+        # 스프레이 반경 내에서 랜덤한 위치에 점을 생성하여 그림을 그립니다.
+        x = event.x + random.randint(-spray_radius, spray_radius)
+        y = event.y + random.randint(-spray_radius, spray_radius)
+        canvas.create_oval(x, y, x, y, fill=brush_color, outline="")
+
+def set_paint_mode_spray():
+    canvas.bind("<B1-Motion>", spray_paint)
 
 window = Tk()
 #Tk 객체를 생성하여 주 윈도우를 만들기
@@ -200,6 +213,10 @@ button_bg_color.pack(side=LEFT)
 
 button_brush_color = Button(window, text="Change Brush Color", command=change_brush_color)
 button_brush_color.pack(side=LEFT)
+
+# 스프레이 버튼 생성 및 배치
+button_spray = Button(window, text="Spray Brush", command=set_paint_mode_spray)
+button_spray.pack()
 
 set_paint_mode_normal() # 프로그램 시작 시 기본 그리기 모드 설정
 
